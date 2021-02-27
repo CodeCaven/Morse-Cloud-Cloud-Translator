@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]> <html class="no-js"> <![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Morse Code Translator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="More code translator" />
+	<meta name="keywords" content="morse code, kids app, translator, education" />
+	<script src="https://www.gstatic.com/firebasejs/3.7.3/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+		apiKey: "AIzaSyA6PGuYFKpoujL630LdYTAffJup3lX8Zd4",
+		authDomain: "team20a2.firebaseapp.com",
+		databaseURL: "https://team20a2.firebaseio.com",
+		storageBucket: "team20a2.appspot.com",
+		messagingSenderId: "741139816722"
+		};
+		firebase.initializeApp(config);
+	</script>
+
+	<link rel="stylesheet" href="bootstrap.css">
+	<link rel="stylesheet" href="style.css">
+	
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body class="boxed">
+	
+	<div id="wrap">
+
+	<div id="fh5co-page">
+		<header id="fh5co-header" role="banner">
+			<div class="container">
+				
+				<div id="fh5co-logo"><img src="morsecode.png" alt="Morse Code Interpreter"></div>
+				
+			</div>
+		</header>
+		
+		<!-- Header -->
+	
+		<div id="fh5co-intro" class="fh5co-section">
+			<div class="container">
+				<div class="row row-bottom-padded-sm">
+					<div class="col-md-8 col-md-offset-2 text-center ts-intro">
+						<h1>Translator</h1>
+						<pre>
+A time of greater than 10 secs is interpreted as a <u>word</u>.
+A time of less than 10 secs but greater than 5 secs is interpreted as a new <u>letter</u>.
+A time of less than 5 secs will be interpreted as a <u>code</u> (dash L or dot S).
+A time of greater than 120 secs is interpreted as a <u>new message</u>.
+						</pre>
+					</div>
+				</div>
+				<div class="row row-bottom-padded-sm">
+					<div class="col-md-6" id="fh5co-content">
+						
+							<div class="form-group">
+								<label for="signal">Code</label>
+								<label type="text" class="form-control" id="signal"></label>
+							</div>
+							<div class="form-group">
+								<label for="timer">Timer</label>
+								<label type="text" class="form-control" id="timer">
+							</div>
+							<div class="form-group">
+								<label for="message">Message</label>
+								<label name="message" id="message"  class="form-control1"></label>
+							</div>
+							
+							<div class="form-group">
+								<label for="switch">On/Off</label><br>
+								<label class="switch">
+  								<input type="checkbox" id = "Switch" onchange="motionChange()" checked>
+  								<div class="slider round"></div>
+								</label>
+							</div>
+							
+					</div>
+				</div>
+				<div class="container">
+				<div class="row row-bottom-padded-sm">
+					<div class="col-md-8 col-md-offset-2 text-center ts-intro">
+						<h1>Alphabet</h1>
+						
+					</div>
+				</div>            
+				<table class="table">
+					<thead>
+					<tr>
+						<th>CODE</th>
+						<th>TRANSLATION</th>
+						<th>CODE</th>
+						<th>TRANSLATION</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>SL</td>
+						<td>A</td>
+						<td>LSLL</td>
+						<td>Y</td>
+					</tr>
+					<tr>
+						<td>LSSS</td>
+						<td>B</td>
+						<td>LLSS</td>
+						<td>Z</td>
+					</tr>
+					<tr>
+						<td>LSLS</td>
+						<td>C</td>
+						<td>LLLLL</td>
+						<td>0</td>
+					</tr>
+					<tr>
+						<td>LSS</td>
+						<td>D</td>
+						<td>SLLLL</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>S</td>
+						<td>E</td>
+						<td>SSLLL</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>SSLS</td>
+						<td>F</td>
+						<td>SSSLL</td>
+						<td>3</td>
+					</tr>
+					<tr>
+						<td>LLS</td>
+						<td>G</td>
+						<td>SSSSL</td>
+						<td>4</td>
+					</tr>
+					<tr>
+						<td>SSSS</td>
+						<td>H</td>
+						<td>SSSSS</td>
+						<td>5</td>
+					</tr>
+					<tr>
+						<td>SS</td>
+						<td>I</td>
+						<td>LSSSS</td>
+						<td>6</td>
+					</tr>
+					<tr>
+						<td>SLLL</td>
+						<td>J</td>
+						<td>LLSSS</td>
+						<td>7</td>
+					</tr>
+					<tr>
+						<td>LSL</td>
+						<td>K</td>
+						<td>LLLSS</td>
+						<td>8</td>
+					</tr>
+					<tr>
+						<td>SLSS</td>
+						<td>L</td>
+						<td>LLLLS</td>
+						<td>9</td>
+					</tr>
+					<tr>
+						<td>LL</td>
+						<td>M</td>
+						<td>SLSLSL</td>
+						<td>.</td>
+					</tr>
+					<tr>
+						<td>LS</td>
+						<td>N</td>
+						<td>LLSLL</td>
+						<td>,</td>
+					</tr>
+					<tr>
+						<td>LLL</td>
+						<td>O</td>
+						<td>LLSSS</td>
+						<td>:</td>
+					</tr>
+					<tr>
+						<td>SLLS</td>
+						<td>P</td>
+						<td>SSLLSS</td>
+						<td>?</td>
+					</tr>
+					<tr>
+						<td>LLSL</td>
+						<td>Q</td>
+						<td>SLLLLS</td>
+						<td>'</td>
+					</tr>
+					<tr>
+						<td>SLS</td>
+						<td>R</td>
+						<td>LSSSSL</td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>SSS</td>
+						<td>S</td>
+						<td>LSSLS</td>
+						<td>/</td>
+					</tr>
+					<tr>
+						<td>L</td>
+						<td>T</td>
+						<td>LSLLSL</td>
+						<td>()</td>
+					</tr>
+					<tr>
+						<td>SSL</td>
+						<td>U</td>
+						<td>SLSSLS</td>
+						<td>"</td>
+					</tr>
+					<tr>
+						<td>SSSL</td>
+						<td>V</td>
+						<td>SLLSLS</td>
+						<td>@</td>
+					</tr>
+					<tr>
+						<td>SLL</td>
+						<td>W</td>
+						<td>LSSSL</td>
+						<td>=</td>
+					</tr>
+					<tr>
+						<td>LSSL</td>
+						<td>X</td>
+						<td>SSSLSL</td>
+						<td>END TRANSMISSION</td>
+					</tr>
+					
+					</tbody>
+				</table>
+</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	
+
+	<script
+			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			  crossorigin="anonymous"></script>
+	<script>src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"</script>
+	<script>src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"</script>
+	<script src="morseClient.js"></script>
+	</body>
+</html>
+

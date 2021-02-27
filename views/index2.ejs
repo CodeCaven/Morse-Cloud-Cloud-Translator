@@ -1,0 +1,140 @@
+
+<!doctype html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>IoT Control Panel TEAM 20</title>
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+  <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <link rel="shortcut icon" href="images/favicon.png">
+  <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+  <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-pink.min.css">
+  <link rel="stylesheet" href="styles.css">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/3.7.3/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyA6PGuYFKpoujL630LdYTAffJup3lX8Zd4",
+      authDomain: "team20a2.firebaseapp.com",
+      databaseURL: "https://team20a2.firebaseio.com",
+      storageBucket: "team20a2.appspot.com",
+      messagingSenderId: "741139816722"
+    };
+    firebase.initializeApp(config);
+  </script>
+</head>
+
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--green-A200">
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+      </div>
+      <div style="text-align:center;display:table__cell" class="mdl-layout--large-screen-only mdl-layout__header-row ">
+        <h3>MORSE CODE TRANSLATOR</h3>
+      </div>
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="mdl-layout__tab-panel is-active">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text">
+              <h4>Control Panel</h4>
+              <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric">Translator On/Off</td>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" id="mdl-led" for="Switch">
+                    <input type="checkbox" id="Switch" class="mdl-switch__input" onchange="motionChange()">    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    Signal
+                  </td>
+                  <td class="mdl-data-table__cell--non-numeric" id="signal">0</td>
+                </tr>
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    Last Letter
+                  </td>
+                  <td class="mdl-data-table__cell--non-numeric" id="letter">0</td>
+                </tr>
+                
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    Message
+                  </td>
+                  <td class="mdl-data-table__cell--non-numeric" id="message">0</td>
+                </tr>
+
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    Delta T
+                  </td>
+                  <td class="mdl-data-table__cell--non-numeric" id="delta">0</td>
+                </tr>
+
+              </table>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="morseClient.js"></script>
+  
+</body>
+
+</html>

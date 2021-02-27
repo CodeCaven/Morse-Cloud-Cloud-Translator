@@ -1,0 +1,170 @@
+#!/usr/bin/env node
+
+/** 
+The Morse Code App
+TEAM 20
+Last modified: 22/05/2017
+
+This is the server for the app
+Data is read from the Iot device and sent to firebase
+The server also listens for updates from the client to firebase
+
+ */
+
+
+var http = require('http');
+var app = require('../app');
+var admin = require("firebase-admin");
+var five = require("johnny-five");
+var serviceAccount = require("../serviceAccountKey.json");
+var functions = require('./functions');
+const logDir = '../Docs/log'; 
+const log = functions.setLogger(logDir);
+
+var board = new five.Board();
+var LONG_MOTION = 5;
+var motion;
+var sense = true; // sensor boolean for on/off
+var time_out = 3; // for HC-SR501 sensor
+var time_delay = 3; // set on sensor
+var total_motions = 0;
+var event_id = 0;
+var signal = {motionStart:0, 
+              motionEnd:0,
+              motionLength:0,
+              code: ''};
+
+
+
+// Get port from environment and store in Express and set up server.
+var port = functions.normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+var server = http.createServer(app);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+// Initialize the app with a service account, granting admin privileges
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://team20a2.firebaseio.com/"  
+});
+
+// Set Channel name
+var db = admin.database();
+var ref = db.ref("/sprint1"); 
+ref.remove();
+
+// Start listening to the board
+board.on("ready", function() {
+
+// Listen for toggle on/off event from client
+  ref.on("child_added", function(snapshot, prevChildKey) {
+    var newPost = snapshot.val();
+    var action = newPost.action;
+
+    if(action != undefined){ 
+      if(action == 'off'){
+        sense = false;
+        event_id = 0;
+      }
+      else{
+        sense = true;
+      }
+    }
+  });
+
+  // Get motion data from the board and post to firebase
+  motion = new five.Motion({pin:2, controller:"HC-SR501"});
+  //motion = new five.Motion(2);
+
+  motion.on('calibrated', () => {
+      log.info("SENSOR ACTIVE"); 
+  });
+
+  motion.on('motionstart', () => {
+      signal.motionStart=Date.now();
+      log.info("MOTION DETECTED");
+  });
+
+  motion.on('motionend', () => {
+        if(sense){
+
+          functions.setLength(signal, time_delay, function(error){
+            if(error) 
+              return log.error(error);
+          });
+
+          functions.setCode(signal, log, LONG_MOTION, function(error){
+            if(error) 
+              return log.error(error);
+          });
+
+          total_motions += 1;
+
+          // Push data to firebase
+          ref.push({
+                id:event_id,
+                type:'motion',
+                time:Date.now(),
+                length: signal.motionLength,
+                code: signal.code
+            }).then(function () {
+              event_id += 1;
+              log.debug("Message saved to Firebase");
+            }.bind(this)).catch(function (error) {
+              log.error('Error writing new message to Firebase Database', error);
+            });
+      }
+      log.info("resetting for " + time_out + " sec...");
+      setTimeout(function () {
+        log.info('SENSOR READY');
+      }, time_out*1000)
+    }); 
+
+  });
+
+/**
+ * Event listener for HTTP server "error" event.
+ * @callback 
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      log.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      log.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ * @callback
+ */
+
+function onListening() {
+  var addr = server.address();
+  
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  log.debug('Listening on ' + bind);
+}
+
+
